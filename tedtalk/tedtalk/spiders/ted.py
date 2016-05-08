@@ -12,8 +12,11 @@ class TedSpider(CrawlSpider):
     rules = [
         Rule(
              LinkExtractor(allow=['/talks\\?page=\d+']),
-             callback='request_talkpage',
              follow=True
+        ),
+        Rule(
+             LinkExtractor(allow=['/talks/\w+']),
+             callback='request_talkpage'
         )
     ]
 
