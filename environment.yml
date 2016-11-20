@@ -1,0 +1,43 @@
+name: tedpipeline
+channels: !!python/tuple
+- !!python/unicode
+  'defaults'
+dependencies:
+- attrs=15.2.0=py35_0
+- cffi=1.8.3=py35_0
+- constantly=15.1.0=py35_0
+- cryptography=1.5.3=py35_0
+- cssselect=1.0.0=py35_0
+- idna=2.1=py35_0
+- incremental=16.10.1=py35_0
+- libxml2=2.9.2=0
+- libxslt=1.1.28=2
+- lxml=3.6.4=py35_0
+- openssl=1.0.2j=0
+- parsel=1.0.3=py35_0
+- pip=9.0.1=py35_0
+- pyasn1=0.1.9=py35_0
+- pyasn1-modules=0.0.8=py35_0
+- pycparser=2.17=py35_0
+- pydispatcher=2.0.5=py35_0
+- pyopenssl=16.2.0=py35_0
+- python=3.5.2=0
+- queuelib=1.4.2=py35_0
+- readline=6.2=2
+- scrapy=1.1.1=py35_0
+- service_identity=16.0.0=py35_0
+- setuptools=27.2.0=py35_0
+- six=1.10.0=py35_0
+- sqlite=3.13.0=0
+- tk=8.5.18=0
+- twisted=16.5.0=py35_0
+- w3lib=1.16.0=py35_0
+- wheel=0.29.0=py35_0
+- xz=5.2.2=0
+- zlib=1.2.8=3
+- zope=1.0=py35_0
+- zope.interface=4.3.2=py35_0
+- pip:
+  - service-identity==16.0.0
+prefix: /Users/blakeboswell/anaconda/envs/tedpipeline
+

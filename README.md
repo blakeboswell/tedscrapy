@@ -3,15 +3,13 @@
 
 Setup environment on OSX:
 
-```
-conda create -n scrapyenv python=2.7 scrapy service_identity pillow
+``` bash
+conda create -n scrapyenv python=3.52 scrapy
 source activate scrapyenv
 ```
 
-Scrapy requires python 2.7.  `pillow` and `service_identity` are not absolutely necessary but could save some trouble down the road.
+Run project:
 
-Start a new project:
-
-```
-scrapy startproject tedtalk
+``` bash
+scrapy crawl ted
 ```

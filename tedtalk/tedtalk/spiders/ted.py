@@ -1,33 +1,45 @@
 # -*- coding: utf-8 -*-
-from scrapy.contrib.spiders import CrawlSpider, Rule
-from scrapy.contrib.linkextractors import LinkExtractor
-from tedtalk.items import TedtalkItem
+from scrapy.http import Request
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
+from tedtalk.items import TedtalkItem, XPATHS
 
 
 class TedSpider(CrawlSpider):
+    ''' scrape the ted talk page
+    '''
     name = 'ted'
-    allowed_domains = ['www.ted.com']
-    start_urls = ['https://www.ted.com/talks/']
+    allowed_domains = ['ted.com']
+    start_urls = ['http://www.ted.com/talks/']
 
-    rules = [
-        Rule(
-             LinkExtractor(allow=['/talks\\?page=\d+']),
-             follow=True
-        ),
-        Rule(
-             LinkExtractor(allow=['/talks/\w+']),
-             callback='request_talkpage'
-        )
-    ]
+    rules = (
+        Rule(LinkExtractor(allow=r'talks\?page=\d+'),
+             follow=True),
+        Rule(LinkExtractor(allow=r'talks\/[a-z_]+'),
+             follow=True,
+             callback='parse_page')
+    )
 
-    def request_talkpage(self, response):
-        print response.url
+    def parse_page(self, response):
+        hxs = response.selector
+        meta = {
+            'speaker': hxs.xpath(XPATHS['speaker']).extract(),
+            'title': hxs.xpath(XPATHS['title']).extract(),
+            'viewn': hxs.xpath(XPATHS['viewn']).extract()
+        }
+        newurl = '%s/transcript?language=en' % response.url
+        yield Request(newurl, callback=self.parse_transcript, meta=meta)
 
-    # def parse_talkpage(self, response):
-    #     sel_list = response.xpath()
-    #     for sel in sel_list:
-    #         item = TedTalkItem()
-    #         item['speaker'] = sel.xpath('//h4[@class="h12 talk-link__speaker"]/text()')
-    #         item['title'] = sel.xpath('//h4[@class="h9 m5"]//a/text()')
-    #         item['url'] = sel.xpath('//h4[@class="h9 m5"]//a/@href')
-    #         item['meta'] = sel.xpath('//div[@class="meta"]//span[@class="meta__val"]//text()')
+    def parse_transcript(self, response):
+        item = TedtalkItem()
+        hxs = response.selector
+
+        transcript = hxs.xpath(XPATHS['transcript']).extract()
+        transcript = ' '.join([t.strip() for t in transcript if t != '\n'])
+
+        item['speaker'] = response.meta['speaker']
+        item['title'] = response.meta['title']
+        item['speaker'] = response.meta['speaker']
+        item['transcript'] = transcript
+
+        return item
