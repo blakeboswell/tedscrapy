@@ -12,10 +12,19 @@ class TedSpider(CrawlSpider):
     allowed_domains = ['ted.com']
     start_urls = ['http://www.ted.com/talks/']
 
+    pagexp = r'//span[@class="pagination__item pagination__link"]'
+    talkxp = r'//div[@class="media__image media__image--thumb talk-link__image"]'
+
     rules = (
-        Rule(LinkExtractor(allow=r'talks\?page=\d+'),
+        Rule(LinkExtractor(
+                allow=r'talks\?page=\d+',
+                restrict_xpaths=pagexp
+             ),
              follow=True),
-        Rule(LinkExtractor(allow=r'talks\/[a-z_]+'),
+        Rule(LinkExtractor(
+                allow=r'talks\/[a-z_]+',
+                restrict_xpaths=talkxp
+             ),
              follow=True,
              callback='parse_page')
     )
@@ -39,7 +48,7 @@ class TedSpider(CrawlSpider):
 
         item['speaker'] = response.meta['speaker']
         item['title'] = response.meta['title']
-        item['speaker'] = response.meta['speaker']
+        item['viewn'] = response.meta['viewn']
         item['transcript'] = transcript
 
         return item
