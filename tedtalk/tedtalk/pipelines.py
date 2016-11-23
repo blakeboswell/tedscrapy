@@ -51,6 +51,8 @@ class WriteJsonl(object):
         self.file.close()
 
     def process_item(self, item, spider):
+        ''' write item to jsonl
+        '''
         line = json.dumps(dict(item)) + '\n'
         self.file.write(line)
         return item

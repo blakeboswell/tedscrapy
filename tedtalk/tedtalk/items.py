@@ -5,10 +5,8 @@ XPATHS = {
     'title': '//span[@class="player-hero__title__content"]/text()',
     'speaker': '//span[@class="player-hero__speaker__content"]/text()',
     'viewn': '//div[@id="sharing-count"]/span/text()',
-    'transcript': ''.join(
-        ['//div[@class="talk-article__body talk-transcript__body"]',
-         '//span[@class="talk-transcript__para__text"]//text()']
-    )
+    'transcript': '//div[@class="talk-article__body talk-transcript__body"]' +
+                  '//span[@class="talk-transcript__para__text"]//text()'
 }
 
 
