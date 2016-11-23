@@ -6,7 +6,7 @@ from tedtalk.items import TedtalkItem, XPATHS
 
 
 class TedSpider(CrawlSpider):
-    ''' scrape the ted talk page
+    ''' scrape transcripts and meta info from TED talk page
     '''
     name = 'ted'
     allowed_domains = ['ted.com']
@@ -26,10 +26,12 @@ class TedSpider(CrawlSpider):
                 restrict_xpaths=talkxp
              ),
              follow=True,
-             callback='parse_page')
+             callback='extract_page')
     )
 
-    def parse_page(self, response):
+    def extract_page(self, response):
+        ''' extract information from TED talk page, follow transcript url
+        '''
         hxs = response.selector
         meta = {
             'speaker': hxs.xpath(XPATHS['speaker']).extract(),
@@ -37,14 +39,15 @@ class TedSpider(CrawlSpider):
             'viewn': hxs.xpath(XPATHS['viewn']).extract()
         }
         newurl = '%s/transcript?language=en' % response.url
-        yield Request(newurl, callback=self.parse_transcript, meta=meta)
+        yield Request(newurl, callback=self.extract_transcript, meta=meta)
 
-    def parse_transcript(self, response):
+    def extract_transcript(self, response):
+        ''' parse transcript from TED talk transcript page
+        '''
         item = TedtalkItem()
         hxs = response.selector
 
         transcript = hxs.xpath(XPATHS['transcript']).extract()
-        transcript = ' '.join([t.strip() for t in transcript if t != '\n'])
 
         item['speaker'] = response.meta['speaker']
         item['title'] = response.meta['title']

@@ -65,7 +65,8 @@ CONCURRENT_REQUESTS = 2
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'tedtalk.pipelines.TedtalkPipeline': 1,
+    'tedtalk.pipelines.TedtalkPipeline': 1,
+    'tedtalk.pipelines.WriteJsonl': 2
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

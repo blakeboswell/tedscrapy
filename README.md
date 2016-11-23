@@ -1,7 +1,7 @@
-## Scraping Ted Talks using Scrapy
+## Scraping TED Talk transcripts using Scrapy
 
 
-Setup environment on OSX:
+Setup environment with Anaconda python distribution:
 
 ``` bash
 conda create -n scrapyenv python=3.52 scrapy
