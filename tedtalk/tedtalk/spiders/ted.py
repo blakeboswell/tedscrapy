@@ -12,24 +12,20 @@ class TedSpider(CrawlSpider):
     allowed_domains = ['ted.com']
     start_urls = ['http://www.ted.com/talks/']
 
-    pagexp = r'//span[@class="pagination__item pagination__link"]'
+    pagexp = r'//a[@class="pagination__item pagination__link"]'
     talkxp = r'//div[@class="media__image media__image--thumb talk-link__image"]'
 
     rules = (
-        Rule(LinkExtractor(
-                allow=r'talks\?page=\d+',
-                restrict_xpaths=pagexp
-             ),
+        Rule(LinkExtractor(allow=r'talks\?page=\d+',
+                           restrict_xpaths=pagexp),
              follow=True),
-        Rule(LinkExtractor(
-                allow=r'talks\/[a-z_]+',
-                restrict_xpaths=talkxp
-             ),
+        Rule(LinkExtractor(allow=r'talks\/[a-z_]+',
+                           restrict_xpaths=talkxp),
              follow=True,
-             callback='extract_page')
+             callback='parse_page')
     )
 
-    def extract_page(self, response):
+    def parse_page(self, response):
         ''' extract information from TED talk page, follow transcript url
         '''
         hxs = response.selector
@@ -39,9 +35,9 @@ class TedSpider(CrawlSpider):
             'viewn': hxs.xpath(XPATHS['viewn']).extract()
         }
         newurl = '%s/transcript?language=en' % response.url
-        yield Request(newurl, callback=self.extract_transcript, meta=meta)
+        yield Request(newurl, callback=self.parse_transcript, meta=meta)
 
-    def extract_transcript(self, response):
+    def parse_transcript(self, response):
         ''' parse transcript from TED talk transcript page
         '''
         item = TedtalkItem()
